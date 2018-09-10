@@ -1,7 +1,6 @@
 import requests
 import datetime
 from datetime import date
-import bs4
 from flask import Flask
 app = Flask(__name__)
 dayforcol = 7
