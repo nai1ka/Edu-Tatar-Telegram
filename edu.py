@@ -158,6 +158,7 @@ def main():
             
             elif "Понедельник" in text  or "/monday" in text:
                 findday()
+                
                 dayforcol = monday
                 collect(dayforcol)
                 i = 0
@@ -166,6 +167,9 @@ def main():
                     send_message(chat_id,"Урок: " +urok[i]+"\n"+"Задание: "+dz[i]+ "\n"+"Оценка: "+ och[i])
                     i+=1
                 send_message(chat_id, "-----------------", parse_mode = "Markdown")
+                urok = []
+                dz = []
+                och = []
             elif "Вторник" in text  or "/tuesday" in text:
                 findday()
                 dayforcol = tuesday
@@ -176,6 +180,9 @@ def main():
                     send_message(chat_id,"Урок: " +urok[i]+"\n"+"Задание: "+dz[i]+ "\n"+"Оценка: "+ och[i])
                     i+=1 
                 send_message(chat_id, "-----------------", parse_mode = "Markdown")
+                urok = []
+                dz = []
+                och = []                
             elif "Среда" in text  or "/wednesday" in text: #ЭТО
                 findday()
                 dayforcol = wednesday #ЭТО
@@ -186,6 +193,9 @@ def main():
                     send_message(chat_id,"Урок: " +urok[i]+"\n"+"Задание: "+dz[i]+ "\n"+"Оценка: "+ och[i])
                     i+=1  
                 send_message(chat_id, "-----------------", parse_mode = "Markdown")
+                urok = []
+                dz = []
+                och = []                
             elif "Четверг" in text  or "/thursday" in text: #ЭТО
                 findday()
                 dayforcol = thursday #ЭТО
@@ -196,6 +206,9 @@ def main():
                     send_message(chat_id,"Урок: " +urok[i]+"\n"+"Задание: "+dz[i]+ "\n"+"Оценка: "+ och[i])
                     i+=1  
                 send_message(chat_id, "-----------------", parse_mode = "Markdown") 
+                urok = []
+                dz = []
+                och = []                
             elif "Пятница" in text  or "/friday" in text: #ЭТО
                 findday()
                 dayforcol = friday #ЭТО
@@ -206,6 +219,9 @@ def main():
                     send_message(chat_id,"Урок: " +urok[i]+"\n"+"Задание: "+dz[i]+ "\n"+"Оценка: "+ och[i])
                     i+=1  
                 send_message(chat_id, "-----------------", parse_mode = "Markdown")
+                urok = []
+                dz = []
+                och = []                
             elif "Суббота" in text  or "/saturday" in text: #ЭТО
                 findday()
                 dayforcol = saturday #ЭТО
@@ -215,7 +231,10 @@ def main():
                 while i!=7 :
                     send_message(chat_id,"Урок: " +urok[i]+"\n"+"Задание: "+dz[i]+ "\n"+"Оценка: "+ och[i])
                     i+=1  
-                send_message(chat_id, "-----------------", parse_mode = "Markdown")  
+                send_message(chat_id, "-----------------", parse_mode = "Markdown") 
+                urok = []
+                dz = []
+                och = []                
             elif "/help" in text:
                 send_message(chat_id,"Выберите день недели для получения оценок:"+"\n"+"/monday- понедельник \n /tuesday - вторник \n /wednesday - среда \n /thursday - четверг \n /friday - пятница \n /saturday - суббота")
             else:
