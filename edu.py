@@ -13,8 +13,8 @@ last_update_id = 0
 r = requests.models.Response
 ismonth = False
 proxies = {
-  'http': 'http://194.67.201.106:3128',
-  'https': 'http://176.212.127.36:56583',
+  'http': 'http://85.21.63.48:44063',
+  'https': 'http://94.242.58.108:10010',
 }
 if mon == 1:
     moth = "Январь"
@@ -163,7 +163,7 @@ def main():
                 collect(dayforcol)
                 i = 0
                 send_message(chat_id, "*Понедельник*"+"\n"+"-----------------", parse_mode = "Markdown")
-                while i!=7 :
+                while i != (len(urok)-1) :
                     send_message(chat_id,"Урок: " +urok[i]+"\n"+"Задание: "+dz[i]+ "\n"+"Оценка: "+ och[i])
                     i+=1
                 send_message(chat_id, "-----------------", parse_mode = "Markdown")
@@ -176,7 +176,7 @@ def main():
                 collect(dayforcol)
                 i = 0
                 send_message(chat_id, "*Вторник*"+"\n"+"-----------------", parse_mode = "Markdown")
-                while i!=7 :
+                while i != (len(urok)-1) :
                     send_message(chat_id,"Урок: " +urok[i]+"\n"+"Задание: "+dz[i]+ "\n"+"Оценка: "+ och[i])
                     i+=1 
                 send_message(chat_id, "-----------------", parse_mode = "Markdown")
@@ -189,7 +189,7 @@ def main():
                 collect(dayforcol)
                 i = 0
                 send_message(chat_id, "*Среда*"+"\n"+"-----------------", parse_mode = "Markdown")#ЭТО
-                while i!=7 :
+                while i != (len(urok)-1) :
                     send_message(chat_id,"Урок: " +urok[i]+"\n"+"Задание: "+dz[i]+ "\n"+"Оценка: "+ och[i])
                     i+=1  
                 send_message(chat_id, "-----------------", parse_mode = "Markdown")
@@ -202,7 +202,8 @@ def main():
                 collect(dayforcol)
                 i = 0
                 send_message(chat_id, "*Четверг*"+"\n"+"-----------------", parse_mode = "Markdown")#ЭТО
-                while i!=7 :
+                while i != (len(urok)-1):
+                    
                     send_message(chat_id,"Урок: " +urok[i]+"\n"+"Задание: "+dz[i]+ "\n"+"Оценка: "+ och[i])
                     i+=1  
                 send_message(chat_id, "-----------------", parse_mode = "Markdown") 
@@ -215,7 +216,7 @@ def main():
                 collect(dayforcol)
                 i = 0
                 send_message(chat_id, "*Пятница*"+"\n"+"-----------------", parse_mode = "Markdown")#ЭТО
-                while i!=7 :
+                while i != (len(urok)-1) :
                     send_message(chat_id,"Урок: " +urok[i]+"\n"+"Задание: "+dz[i]+ "\n"+"Оценка: "+ och[i])
                     i+=1  
                 send_message(chat_id, "-----------------", parse_mode = "Markdown")
@@ -228,7 +229,7 @@ def main():
                 collect(dayforcol)
                 i = 0
                 send_message(chat_id, "*Суббота*"+"\n"+"-----------------", parse_mode = "Markdown")#ЭТО
-                while i!=7 :
+                while i != (len(urok)-1) :
                     send_message(chat_id,"Урок: " +urok[i]+"\n"+"Задание: "+dz[i]+ "\n"+"Оценка: "+ och[i])
                     i+=1  
                 send_message(chat_id, "-----------------", parse_mode = "Markdown") 
@@ -240,7 +241,7 @@ def main():
                 collect(dayforcol)
                 i = 0
                 send_message(chat_id, "*Завтра*"+"\n"+"-----------------", parse_mode = "Markdown")#ЭТО
-                while i!=7 :
+                while i != (len(urok)-1) :
                     send_message(chat_id,"Урок: " +urok[i]+"\n"+"Задание: "+dz[i]+ "\n"+"Оценка: "+ och[i])
                     i+=1  
                 send_message(chat_id, "-----------------", parse_mode = "Markdown") 
@@ -252,7 +253,7 @@ def main():
                 collect(dayforcol)
                 i = 0
                 send_message(chat_id, "*Сегодня*"+"\n"+"-----------------", parse_mode = "Markdown")#ЭТО
-                while i!=7 :
+                while i != (len(urok)-1) :
                     send_message(chat_id,"Урок: " +urok[i]+"\n"+"Задание: "+dz[i]+ "\n"+"Оценка: "+ och[i])
                     i+=1  
                 send_message(chat_id, "-----------------", parse_mode = "Markdown") 
@@ -260,7 +261,7 @@ def main():
                 dz = []
                 och = []
             elif "/help" in text:
-                send_message(chat_id,"Выберите день недели для получения оценок:"+"\n"+"/monday- понедельник \n /tuesday - вторник \n /wednesday - среда \n /thursday - четверг \n /friday - пятница \n /saturday - суббота")
+                send_message(chat_id,"Выберите день недели для получения оценок:"+"/today - сегодня \n /tommorow - завтра \n /monday - понедельник \n /tuesday - вторник \n /wednesday - среда \n /thursday - четверг \n /friday - пятница \n /saturday - суббота")
             else:
                 send_message(chat_id, "К сожалению, у меня нет такой команды. Введите /help для получения списка комманд", )  
         else:
