@@ -247,6 +247,18 @@ def main():
                 urok = []
                 dz = []
                 och = []
+            elif "Сегодня" in text or "/today" in text:
+                dayforcol = (now.day) #ЭТО
+                collect(dayforcol)
+                i = 0
+                send_message(chat_id, "*Сегодня*"+"\n"+"-----------------", parse_mode = "Markdown")#ЭТО
+                while i!=7 :
+                    send_message(chat_id,"Урок: " +urok[i]+"\n"+"Задание: "+dz[i]+ "\n"+"Оценка: "+ och[i])
+                    i+=1  
+                send_message(chat_id, "-----------------", parse_mode = "Markdown") 
+                urok = []
+                dz = []
+                och = []
             elif "/help" in text:
                 send_message(chat_id,"Выберите день недели для получения оценок:"+"\n"+"/monday- понедельник \n /tuesday - вторник \n /wednesday - среда \n /thursday - четверг \n /friday - пятница \n /saturday - суббота")
             else:
