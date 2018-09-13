@@ -56,13 +56,12 @@ params = {
 #-----------------------------------------------------------------------------------
 
 def auth():
-    global r,soup
-    with requests.Session() as session:
-        session.get("https://edu.tatar.ru/logon",proxies = proxies)
-        session.post("https://edu.tatar.ru/logon",params,headers=headers,proxies = proxies)
-        r = session.get("https://edu.tatar.ru/user/diary.xml",proxies = proxies)
-        return r
-    
+    global r,soup,session
+    session = requests.Session()
+    session.get("https://edu.tatar.ru/logon",proxies = proxies)
+    session.post("https://edu.tatar.ru/logon",params,headers=headers,proxies = proxies)
+    return session
+
 #--------------------------------------------------------------------------------------
 def findday():
     global monday,tuesday,wednesday,thursday, friday,saturday
@@ -73,10 +72,10 @@ def findday():
     thursday = (today + relativedelta(weekday=TH(-1))).day 
     friday = (today + relativedelta(weekday=FR(-1))).day 
     saturday = (today + relativedelta(weekday=SA(-1))).day 
+#auth()
 def collect(dayforcol):
-    
-    
-    global r,dz,urok,och
+    global session,dz,urok,och
+    r = session.get("https://edu.tatar.ru/user/diary.xml",proxies = proxies)
     root = et.XML(r.text)
     for elem in root:
         for day1 in elem:
@@ -262,7 +261,8 @@ def main():
                 dz = []
                 och = [] 
             elif "Завтра" in text or "/tommorow" in text:
-                dayforcol = (datetime.date.today()+datetime.timedelta(days=1)).day #ЭТО
+                now = datetime.datetime.now()
+                dayforcol = (now.today()+datetime.timedelta(days=1)).day #ЭТО
                 collect(dayforcol)
                 if urok[0]=="Нет Урока":
                     urok = urok[:-1]
@@ -278,6 +278,7 @@ def main():
                 dz = []
                 och = []
             elif "Сегодня" in text or "/today" in text:
+                now = datetime.datetime.now()
                 dayforcol = (now.day) #ЭТО
                 collect(dayforcol)
                 if urok[0]=="Нет Урока":
@@ -285,7 +286,6 @@ def main():
                 else:
                     urok = urok[:-2]                  
                 i = 0
-                send_message(chat_id, dayforcol, parse_mode = "Markdown")#ЭТО
                 send_message(chat_id, "*Сегодня*"+"\n"+"-----------------", parse_mode = "Markdown")#ЭТО
                 while i != len(urok) :
                     send_message(chat_id,"Урок: " +urok[i]+"\n"+"Задание: "+dz[i]+ "\n"+"Оценка: "+ och[i])
