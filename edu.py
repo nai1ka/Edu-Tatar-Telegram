@@ -285,6 +285,7 @@ def main():
                 else:
                     urok = urok[:-2]                  
                 i = 0
+                send_message(chat_id, dayforcol, parse_mode = "Markdown")#ЭТО
                 send_message(chat_id, "*Сегодня*"+"\n"+"-----------------", parse_mode = "Markdown")#ЭТО
                 while i != len(urok) :
                     send_message(chat_id,"Урок: " +urok[i]+"\n"+"Задание: "+dz[i]+ "\n"+"Оценка: "+ och[i])
