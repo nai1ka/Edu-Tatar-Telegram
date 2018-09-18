@@ -4,6 +4,9 @@ from datetime import date
 from flask import Flask
 app = Flask(__name__)
 dayforcol = 7
+d = {'today': [], 'tommorow': [], 'monday':[], 'tuesday':[], 'wednesday':[], 'thursday':[], 'friday':[], 'saturday':[]}
+u = {'today': [], 'tommorow': [], 'monday':[], 'tuesday':[], 'wednesday':[], 'thursday':[], 'friday':[], 'saturday':[]}
+o = {'today': [], 'tommorow': [], 'monday':[], 'tuesday':[], 'wednesday':[], 'thursday':[], 'friday':[], 'saturday':[]}
 import xml.etree.ElementTree as et
 from dateutil.relativedelta import relativedelta, MO,WE, TH,TU,SU,FR,SA
 now = datetime.datetime.now()
@@ -82,6 +85,7 @@ def collect(dayforcol):
             if(day1.attrib["date"]==str(dayforcol)) and (elem.attrib["month"]==moth):
                 for lesson in day1.find("classes"):
                     if lesson.text!=None:
+                        
                         urok.append(lesson.text)#УРОК
                     else:
                         urok.append("Нет Урока")
@@ -97,11 +101,88 @@ def collect(dayforcol):
                         och.append(marks.text)#Домашка  
                     else:
                         och.append("Нет оценки")
-    
-    
-    
-#------------------------------------------------------------------------------------------------
 
+def coll1():
+    global urok,och,dz,d
+    collect(now.day)
+    for i in dz:
+        d["today"].append(i)
+    for i in urok:
+        u["today"].append(i) 
+    for i in och:
+        o["today"].append(i)
+        
+    dz = []
+    urok = []
+    och = []
+    collect((datetime.date.today()+datetime.timedelta(days=1)).day)
+    for i in dz:
+        d["tommorow"].append(i)
+    for i in urok:
+        u["tommorow"].append(i)  
+    for i in och:
+        o["tommorow"].append(i)                
+    dz = []
+    urok = []
+    och = []    
+    collect(monday)
+    for i in dz:
+        d["monday"].append(i)
+    for i in urok:
+        u["monday"].append(i)  
+    for i in och:
+        o["monday"].append(i)                
+    dz = []
+    urok = []
+    och = []    
+    collect(wednesday)
+    for i in dz:
+        d["wednesday"].append(i)
+    for i in urok:
+        u["wednesday"].append(i)    
+    for i in och:
+        o["wednesday"].append(i)                
+    dz = []
+    urok = []
+    och = []    
+    collect(tuesday)
+    for i in dz:
+        d["tuesday"].append(i)
+    for i in urok:
+        u["tuesday"].append(i)  
+    for i in och:
+        o["tuesday"].append(i)            
+    dz = []
+    urok = []
+    och = []    
+    collect(thursday)
+    for i in dz:
+        d["thursday"].append(i)
+    for i in urok:
+        u["thursday"].append(i) 
+    for i in och:
+        o["thursday"].append(i)            
+    dz = []
+    urok = []
+    och = []    
+    collect(friday)
+    for i in dz:
+        d["friday"].append(i)
+    for i in urok:
+        u["friday"].append(i)    
+    for i in och:
+        o["friday"].append(i)                
+    dz = []
+    urok = []
+    och = []    
+    collect(saturday)
+    for i in dz:
+        d["saturday"].append(i)
+    for i in urok:
+        u["saturday"].append(i)  
+    for i in och:
+        o["saturday"].append(i)                
+     
 
 token = "613454940:AAHQ7nZJfQ1GbhYNNUYqE_cCAlUA3sqmaqc"
 URL = "https://api.telegram.org/bot"+token+"/"
@@ -129,19 +210,13 @@ def send_message(chat_id,text="",parse_mode=""):
     requests.get(url)
 def main():
     global chat_id, projects,islog,message,soup
-   
     global y,urok,och,dz,dayforcol
     findday()
     auth()
-    
-    
-    
+    coll1()
     @app.route('/')
     def pas():
         return "Hello"  
-    
-    
-    
     while True:
         answer = get_message()
         if answer!= None:
@@ -149,151 +224,66 @@ def main():
             text = answer["text"] 
             
             if "/update" in text or "Обновить" in text:
-                urok = []
-                dz = []
-                och = []
-                collect(dayforcol)
+                coll1()
                 send_message(chat_id, "Оценки обновлены. Выберите день недели для получения оценок:"+"\n"+"/monday- понедельник \n /tuesday - вторник \n /wednesday - среда \n /thursday - четверг \n /friday - пятница \n /saturday - суббота")
             
-            elif "Понедельник" in text  or "/monday" in text:
-                findday()
-                
-                dayforcol = monday
-                collect(dayforcol)
-                if urok[0]=="Нет Урока":
-                    urok = urok[:-1]
-                else:
-                    urok = urok[:-2]                  
+            elif "Понедельник" in text  or "/monday" in text:            
                 i = 0
                 send_message(chat_id, "*Понедельник*"+"\n"+"-----------------", parse_mode = "Markdown")
                 while i != len(urok) :
-                    send_message(chat_id,"Урок: " +urok[i]+"\n"+"Задание: "+dz[i]+ "\n"+"Оценка: "+ och[i])
+                    send_message(chat_id,"Урок: " +u["monday"][i]+"\n"+"Задание: "+d["monday"][i]+ "\n"+"Оценка: "+ o["monday"][i])
                     i+=1
                 send_message(chat_id, "-----------------", parse_mode = "Markdown")
-                urok = []
-                dz = []
-                och = []
-            elif "Вторник" in text  or "/tuesday" in text:
-                findday()
-                dayforcol = tuesday
-                collect(dayforcol)
-                if urok[0]=="Нет Урока":
-                    urok = urok[:-1]
-                else:
-                    urok = urok[:-2]                  
+            elif "Вторник" in text  or "/tuesday" in text:            
                 i = 0
                 send_message(chat_id, "*Вторник*"+"\n"+"-----------------", parse_mode = "Markdown")
                 while i != len(urok) :
-                    send_message(chat_id,"Урок: " +urok[i]+"\n"+"Задание: "+dz[i]+ "\n"+"Оценка: "+ och[i])
+                    send_message(chat_id,"Урок: " +u["tuesday"][i]+"\n"+"Задание: "+d["tuesday"][i]+ "\n"+"Оценка: "+ o["tuesday"][i])
                     i+=1 
-                send_message(chat_id, "-----------------", parse_mode = "Markdown")
-                urok = []
-                dz = []
-                och = []                
-            elif "Среда" in text  or "/wednesday" in text: #ЭТО
-                findday()
-                dayforcol = wednesday #ЭТО
-                collect(dayforcol)
-                if urok[0]=="Нет Урока":
-                    urok = urok[:-1]
-                else:
-                    urok = urok[:-2]                
+                send_message(chat_id, "-----------------", parse_mode = "Markdown")                           
+            elif "Среда" in text  or "/wednesday" in text: #ЭТО             
                 i = 0
                 send_message(chat_id, "*Среда*"+"\n"+"-----------------", parse_mode = "Markdown")#ЭТО
                 while i != len(urok) :
-                    send_message(chat_id,"Урок: " +urok[i]+"\n"+"Задание: "+dz[i]+ "\n"+"Оценка: "+ och[i])
+                    send_message(chat_id,"Урок: " +u["wednesday"][i]+"\n"+"Задание: "+d["wednesday"][i]+ "\n"+"Оценка: "+ o["wednesday"][i])
                     i+=1  
-                send_message(chat_id, "-----------------", parse_mode = "Markdown")
-                urok = []
-                dz = []
-                och = []                
-            elif "Четверг" in text  or "/thursday" in text: #ЭТО
-                findday()
-                dayforcol = thursday #ЭТО
-                collect(dayforcol)
-                if urok[0]=="Нет Урока":
-                    urok = urok[:-1]
-                else:
-                    urok = urok[:-2]                  
+                send_message(chat_id, "-----------------", parse_mode = "Markdown")              
+            elif "Четверг" in text  or "/thursday" in text: #ЭТО           
                 i = 0
                 send_message(chat_id, "*Четверг*"+"\n"+"-----------------", parse_mode = "Markdown")#ЭТО
                 while i != len(urok):
                     
-                    send_message(chat_id,"Урок: " +urok[i]+"\n"+"Задание: "+dz[i]+ "\n"+"Оценка: "+ och[i])
+                    send_message(chat_id,"Урок: " +u["thursday"][i]+"\n"+"Задание: "+d["thursday"][i]+ "\n"+"Оценка: "+ o["thursday"][i])
                     i+=1  
-                send_message(chat_id, "-----------------", parse_mode = "Markdown") 
-                urok = []
-                dz = []
-                och = []                
-            elif "Пятница" in text  or "/friday" in text: #ЭТО
-                findday()
-                dayforcol = friday #ЭТО
-                collect(dayforcol)
-                if urok[0]=="Нет Урока":
-                    urok = urok[:-1]
-                else:
-                    urok = urok[:-2]                  
+                send_message(chat_id, "-----------------", parse_mode = "Markdown")            
+            elif "Пятница" in text  or "/friday" in text: #ЭТО               
                 i = 0
                 send_message(chat_id, "*Пятница*"+"\n"+"-----------------", parse_mode = "Markdown")#ЭТО
                 while i != len(urok) :
-                    send_message(chat_id,"Урок: " +urok[i]+"\n"+"Задание: "+dz[i]+ "\n"+"Оценка: "+ och[i])
+                    send_message(chat_id,"Урок: " +u["friday"][i]+"\n"+"Задание: "+d["friday"][i]+ "\n"+"Оценка: "+ o["friday"][i])
                     i+=1  
-                send_message(chat_id, "-----------------", parse_mode = "Markdown")
-                urok = []
-                dz = []
-                och = []                
+                send_message(chat_id, "-----------------", parse_mode = "Markdown")             
             elif "Суббота" in text  or "/saturday" in text: #ЭТО
-                findday()
-                dayforcol = saturday #ЭТО
-                collect(dayforcol)
-                if urok[0]=="Нет Урока":
-                    urok = urok[:-1]
-                else:
-                    urok = urok[:-2]
                 i = 0
                 send_message(chat_id, "*Суббота*"+"\n"+"-----------------", parse_mode = "Markdown")#ЭТО
                 while i != len(urok):
-                    
-                    send_message(chat_id,"Урок: " +urok[i]+"\n"+"Задание: "+dz[i]+ "\n"+"Оценка: "+ och[i])
+                    send_message(chat_id,"Урок: " +u["saturday"][i]+"\n"+"Задание: "+d["saturday"][i]+ "\n"+"Оценка: "+ o["saturday"][i])
                     i+=1  
                 send_message(chat_id, "-----------------", parse_mode = "Markdown") 
-                urok = []
-                dz = []
-                och = [] 
-            elif "Завтра" in text or "/tommorow" in text:
-                now = datetime.datetime.now()
-                dayforcol = (now.today()+datetime.timedelta(days=1)).day #ЭТО
-                collect(dayforcol)
-                if urok[0]=="Нет Урока":
-                    urok = urok[:-1]
-                else:
-                    urok = urok[:-2]                  
+            elif "Завтра" in text or "/tommorow" in text:           
                 i = 0
                 send_message(chat_id, "*Завтра*"+"\n"+"-----------------", parse_mode = "Markdown")#ЭТО
                 while i != len(urok) :
-                    send_message(chat_id,"Урок: " +urok[i]+"\n"+"Задание: "+dz[i]+ "\n"+"Оценка: "+ och[i])
+                    send_message(chat_id,"Урок: " +u["tommorow"][i]+"\n"+"Задание: "+d["tommorow"][i]+ "\n"+"Оценка: "+ o["tommorow"][i])
                     i+=1  
                 send_message(chat_id, "-----------------", parse_mode = "Markdown") 
-                urok = []
-                dz = []
-                och = []
-            elif "Сегодня" in text or "/today" in text:
-                now = datetime.datetime.now()
-                dayforcol = (now.day) #ЭТО
-                collect(dayforcol)
-                if urok[0]=="Нет Урока":
-                    urok = urok[:-1]
-                else:
-                    urok = urok[:-2]                  
+            elif "Сегодня" in text or "/today" in text:      
                 i = 0
                 send_message(chat_id, "*Сегодня*"+"\n"+"-----------------", parse_mode = "Markdown")#ЭТО
                 while i != len(urok) :
-                    send_message(chat_id,"Урок: " +urok[i]+"\n"+"Задание: "+dz[i]+ "\n"+"Оценка: "+ och[i])
+                    send_message(chat_id,"Урок: " +u["today"][i]+"\n"+"Задание: "+d["today"][i]+ "\n"+"Оценка: "+o["today"][i])
                     i+=1  
                 send_message(chat_id, "-----------------", parse_mode = "Markdown") 
-                urok = []
-                dz = []
-                och = []
             elif "/help" in text:
                 send_message(chat_id,"Выберите день недели для получения оценок:"+"/today - сегодня \n /tommorow - завтра \n /monday - понедельник \n /tuesday - вторник \n /wednesday - среда \n /thursday - четверг \n /friday - пятница \n /saturday - суббота")
             else:
