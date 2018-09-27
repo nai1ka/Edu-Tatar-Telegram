@@ -63,8 +63,6 @@ def auth():
     session = requests.Session()
     session.get("https://edu.tatar.ru/logon",proxies = proxies)
     session.post("https://edu.tatar.ru/logon",params,headers=headers,proxies = proxies)
-    r = session.get("https://edu.tatar.ru/user/diary.xml",proxies = proxies)
-    print(r.text)
     return session
 
 #--------------------------------------------------------------------------------------
