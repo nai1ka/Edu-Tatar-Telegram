@@ -53,7 +53,7 @@ headers = {
     }
 params = {
       'main_login':'4823114196',
-      'main_password':''
+      'main_password':'be7l'
    }
 
 #-----------------------------------------------------------------------------------
@@ -63,6 +63,8 @@ def auth():
     session = requests.Session()
     session.get("https://edu.tatar.ru/logon",proxies = proxies)
     session.post("https://edu.tatar.ru/logon",params,headers=headers,proxies = proxies)
+    r = session.get("https://edu.tatar.ru/user/diary.xml",proxies = proxies)
+    print(r.text)
     return session
 
 #--------------------------------------------------------------------------------------
@@ -182,7 +184,7 @@ def coll1():
         u["saturday"].append(i)  
     for i in och:
         o["saturday"].append(i)                
-     
+
 
 token = "613454940:AAHQ7nZJfQ1GbhYNNUYqE_cCAlUA3sqmaqc"
 URL = "https://api.telegram.org/bot"+token+"/"
@@ -213,6 +215,7 @@ def main():
     global y,urok,och,dz,dayforcol
     findday()
     auth()
+    
     coll1()
     @app.route('/')
     def pas():
@@ -270,14 +273,16 @@ def main():
                     send_message(chat_id,"Урок: " +u["saturday"][i]+"\n"+"Задание: "+d["saturday"][i]+ "\n"+"Оценка: "+ o["saturday"][i])
                     i+=1  
                 send_message(chat_id, "-----------------", parse_mode = "Markdown") 
-            elif "Завтра" in text or "/tommorow" in text:           
+            elif "Завтра" in text or "/tommorow" in text:  
+                coll1()
                 i = 0
                 send_message(chat_id, "*Завтра*"+"\n"+"-----------------", parse_mode = "Markdown")#ЭТО
                 while i != len(urok) :
                     send_message(chat_id,"Урок: " +u["tommorow"][i]+"\n"+"Задание: "+d["tommorow"][i]+ "\n"+"Оценка: "+ o["tommorow"][i])
                     i+=1  
                 send_message(chat_id, "-----------------", parse_mode = "Markdown") 
-            elif "Сегодня" in text or "/today" in text:      
+            elif "Сегодня" in text or "/today" in text: 
+                coll1()
                 i = 0
                 send_message(chat_id, "*Сегодня*"+"\n"+"-----------------", parse_mode = "Markdown")#ЭТО
                 while i != len(urok) :
