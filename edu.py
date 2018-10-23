@@ -53,7 +53,7 @@ headers = {
     }
 params = {
       'main_login':'4823114196',
-      'main_password':'be7'
+      'main_password':'be7l'
    }
 
 #-----------------------------------------------------------------------------------
@@ -288,7 +288,7 @@ def main():
                     i+=1  
                 send_message(chat_id, "-----------------", parse_mode = "Markdown") 
             elif "/help" in text:
-                send_message(chat_id,"Для обновления журнала используйте /update"
+                send_message(chat_id,"Для обновления журнала используйте /update")
                 send_message(chat_id,"Выберите день недели для получения оценок:"+"/today - сегодня \n /tommorow - завтра \n /monday - понедельник \n /tuesday - вторник \n /wednesday - среда \n /thursday - четверг \n /friday - пятница \n /saturday - суббота")
              elif "/start" in text  or "/monday" in text:            
                 
