@@ -288,7 +288,11 @@ def main():
                     i+=1  
                 send_message(chat_id, "-----------------", parse_mode = "Markdown") 
             elif "/help" in text:
+                send_message(chat_id,"Для обновления журнала используйте /update"
                 send_message(chat_id,"Выберите день недели для получения оценок:"+"/today - сегодня \n /tommorow - завтра \n /monday - понедельник \n /tuesday - вторник \n /wednesday - среда \n /thursday - четверг \n /friday - пятница \n /saturday - суббота")
+             elif "/start" in text  or "/monday" in text:            
+                
+                send_message(chat_id, "Здравствуйте! Я - бот, созданный Наилем Миннемуллиным. Для подробной информации введите /help")
             else:
                 send_message(chat_id, "К сожалению, у меня нет такой команды. Введите /help для получения списка комманд", )  
         else:
