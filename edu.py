@@ -184,7 +184,7 @@ def coll1():
         o["saturday"].append(i)                
 
 
-token = "613454940:AAHQ7nZJfQ1GbhYNNUYqE_cCAlUA3sqmaqc"
+token = "764664091:AAEJLdmBHfRPNa-HRdwuCU47lDxViFkNoGA"
 URL = "https://api.telegram.org/bot"+token+"/"
 def get_updates():
     url = URL+ "getupdates"
@@ -223,7 +223,7 @@ def main():
         if answer!= None:
             chat_id = answer["chat_id"]
             text = answer["text"] 
-            
+            print(answer)
             if "/update" in text or "Обновить" in text:
                 coll1()
                 send_message(chat_id, "Оценки обновлены. Выберите день недели для получения оценок:"+"\n"+"/monday- понедельник \n /tuesday - вторник \n /wednesday - среда \n /thursday - четверг \n /friday - пятница \n /saturday - суббота")
