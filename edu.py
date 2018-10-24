@@ -225,6 +225,7 @@ def main():
             text = answer["text"] 
             print(answer)
             if "/update" in text or "Обновить" in text:
+                send_message(chat_id, "Загрузка данных. Это может занять некоторое время...")
                 coll1()
                 send_message(chat_id, "Оценки обновлены. Выберите день недели для получения оценок:"+"\n"+"/monday- понедельник \n /tuesday - вторник \n /wednesday - среда \n /thursday - четверг \n /friday - пятница \n /saturday - суббота")
             
