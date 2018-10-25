@@ -192,10 +192,12 @@ def get_updates():
     return r.json()
 def get_message():
     data = get_updates()
-    last_object = data["result"][-1]
-    current_update_id = last_object["update_id"]
+    if len(data)>0:
+        last_object = data["result"][-1]
+        current_update_id = last_object["update_id"]
+    
     global last_update_id
-    if last_update_id!=current_update_id:
+    if last_update_id!=current_update_id and "text" in last_object["message"]:
         last_update_id = current_update_id
         chat_id = last_object["message"]["chat"]["id"]
         message_text = last_object["message"]["text"]
@@ -205,6 +207,7 @@ def get_message():
            }
         return message
     return None
+
 def send_message(chat_id,text="",parse_mode=""):
     url = URL + "sendmessage?chat_id={}&text={}&parse_mode={}".format(chat_id,text,parse_mode)
     requests.get(url)
@@ -220,6 +223,7 @@ def main():
         return "Hello"  
     while True:
         answer = get_message()
+        
         if answer!= None:
             chat_id = answer["chat_id"]
             text = answer["text"] 
