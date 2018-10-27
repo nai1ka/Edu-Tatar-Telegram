@@ -277,13 +277,16 @@ def main():
                     i+=1  
                 send_message(chat_id, "-----------------", parse_mode = "Markdown") 
             elif "Завтра" in text or "/tommorow" in text:  
-                coll1()
-                i = 0
-                send_message(chat_id, "*Завтра*"+"\n"+"-----------------", parse_mode = "Markdown")#ЭТО
-                while i != len(urok) :
-                    send_message(chat_id,"Урок: " +u["tommorow"][i]+"\n"+"Задание: "+d["tommorow"][i]+ "\n"+"Оценка: "+ o["tommorow"][i])
-                    i+=1  
-                send_message(chat_id, "-----------------", parse_mode = "Markdown") 
+                if (datetime.date.today()+datetime.timedelta(days=1)).isoweekday()!=7:
+                    coll1()
+                    i = 0
+                    send_message(chat_id, "*Завтра*"+"\n"+"-----------------", parse_mode = "Markdown")#ЭТО
+                    while i != len(urok) :
+                        send_message(chat_id,"Урок: " +u["tommorow"][i]+"\n"+"Задание: "+d["tommorow"][i]+ "\n"+"Оценка: "+ o["tommorow"][i])
+                        i+=1  
+                    send_message(chat_id, "-----------------", parse_mode = "Markdown") 
+                else:
+                    send_message(chat_id, "Завтра воскресенье!",parse_mode = "Markdown")
             elif "Сегодня" in text or "/today" in text: 
                 coll1()
                 i = 0
