@@ -189,10 +189,12 @@ URL = "https://api.telegram.org/bot"+token+"/"
 def get_updates():
     url = URL+ "getupdates"
     r = requests.get(url)
+    
     return r.json()
 def get_message():
     data = get_updates()
-    if len(data)>0:
+
+    if len(data["result"])>0:
         last_object = data["result"][-1]
         current_update_id = last_object["update_id"]
     
