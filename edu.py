@@ -307,4 +307,8 @@ def main():
                 send_message(chat_id, "К сожалению, у меня нет такой команды. Введите /help для получения списка комманд", )  
         else:
             continue
-main()
+while True:
+    try:
+        main()
+    except:
+        continue
