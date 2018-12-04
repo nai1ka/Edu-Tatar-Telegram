@@ -63,7 +63,9 @@ def auth():
     session = requests.Session()
     session.get("https://edu.tatar.ru/logon",proxies = proxies)
     session.post("https://edu.tatar.ru/logon",params,headers=headers,proxies = proxies)
+    
     return session
+
 
 #--------------------------------------------------------------------------------------
 def findday():
@@ -79,6 +81,7 @@ def findday():
 def collect(dayforcol):
     global session,dz,urok,och
     r = session.get("https://edu.tatar.ru/user/diary.xml",proxies = proxies)
+    
     root = et.XML(r.text)
     for elem in root:
         for day1 in elem:
@@ -101,10 +104,13 @@ def collect(dayforcol):
                         och.append(marks.text)#Домашка  
                     else:
                         och.append("Нет оценки")
+                
 
 def coll1():
     global urok,och,dz,d
+    
     collect(now.day)
+    
     for i in dz:
         d["today"].append(i)
     for i in urok:
@@ -182,7 +188,7 @@ def coll1():
         u["saturday"].append(i)  
     for i in och:
         o["saturday"].append(i)                
-
+    
 
 token = "709465966:AAHGXmcYU8_S7UbGwXgTf_CKE3vngeEOOis"
 URL = "https://api.telegram.org/bot"+token+"/"
@@ -220,6 +226,7 @@ def main():
     auth()
     
     coll1()
+    
     @app.route('/')
     def pas():
         return "Hello"  
@@ -238,28 +245,29 @@ def main():
             elif "Понедельник" in text  or "/monday" in text:            
                 i = 0
                 send_message(chat_id, "*Понедельник*"+"\n"+"-----------------", parse_mode = "Markdown")
-                while i != len(urok) and len(u["monday"])>0:
+                while len(u["monday"])>i:
                     send_message(chat_id,"Урок: " +u["monday"][i]+"\n"+"Задание: "+d["monday"][i]+ "\n"+"Оценка: "+ o["monday"][i])
                     i+=1
                 send_message(chat_id, "-----------------", parse_mode = "Markdown")
             elif "Вторник" in text  or "/tuesday" in text:            
                 i = 0
                 send_message(chat_id, "*Вторник*"+"\n"+"-----------------", parse_mode = "Markdown")
-                while i != len(urok) and len(u["tuesday"])>0:
+                while len(u["tuesday"])>i:
                     send_message(chat_id,"Урок: " +u["tuesday"][i]+"\n"+"Задание: "+d["tuesday"][i]+ "\n"+"Оценка: "+ o["tuesday"][i])
                     i+=1 
                 send_message(chat_id, "-----------------", parse_mode = "Markdown")                           
             elif "Среда" in text  or "/wednesday" in text: #ЭТО             
                 i = 0
                 send_message(chat_id, "*Среда*"+"\n"+"-----------------", parse_mode = "Markdown")#ЭТО
-                while i != len(urok) and len(u["wednesday"])>0:
+                print(d,u,o)
+                while len(u["wednesday"])>i:
                     send_message(chat_id,"Урок: " +u["wednesday"][i]+"\n"+"Задание: "+d["wednesday"][i]+ "\n"+"Оценка: "+ o["wednesday"][i])
                     i+=1  
                 send_message(chat_id, "-----------------", parse_mode = "Markdown")              
             elif "Четверг" in text  or "/thursday" in text: #ЭТО           
                 i = 0
                 send_message(chat_id, "*Четверг*"+"\n"+"-----------------", parse_mode = "Markdown")#ЭТО
-                while i != len(urok)and len(u["thursday"])>0:
+                while len(u["thursday"])>i:
                     
                     send_message(chat_id,"Урок: " +u["thursday"][i]+"\n"+"Задание: "+d["thursday"][i]+ "\n"+"Оценка: "+ o["thursday"][i])
                     i+=1  
@@ -267,24 +275,27 @@ def main():
             elif "Пятница" in text  or "/friday" in text: #ЭТО               
                 i = 0
                 send_message(chat_id, "*Пятница*"+"\n"+"-----------------", parse_mode = "Markdown")#ЭТО
-                while i != len(urok) and len(u["friday"])>0:
+                while len(u["friday"])>i:
                     send_message(chat_id,"Урок: " +u["friday"][i]+"\n"+"Задание: "+d["friday"][i]+ "\n"+"Оценка: "+ o["friday"][i])
                     i+=1  
                 send_message(chat_id, "-----------------", parse_mode = "Markdown")             
             elif "Суббота" in text  or "/saturday" in text: #ЭТО
                 i = 0
                 send_message(chat_id, "*Суббота*"+"\n"+"-----------------", parse_mode = "Markdown")#ЭТО
-                while i != len(urok)and len(u["saturday"])>0:
+                while len(u["saturday"])>i:
                     send_message(chat_id,"Урок: " +u["saturday"][i]+"\n"+"Задание: "+d["saturday"][i]+ "\n"+"Оценка: "+ o["saturday"][i])
                     i+=1  
                 send_message(chat_id, "-----------------", parse_mode = "Markdown") 
             elif "Завтра" in text or "/tommorow" in text:  
                 if (datetime.date.today()+datetime.timedelta(days=1)).isoweekday()!=7:
+                    
                     i = 0
                     send_message(chat_id, "*Завтра*"+"\n"+"-----------------", parse_mode = "Markdown")#ЭТО
-                    while i != len(urok) and len(u["tommorow"])>0:
+                    print(len(u["tommorow"]))
+                    while len(u["tommorow"])>i:
                         
                         send_message(chat_id,"Урок: " +u["tommorow"][i]+"\n"+"Задание: "+d["tommorow"][i]+ "\n"+"Оценка: "+ o["tommorow"][i])
+                        
                         i+=1  
                     send_message(chat_id, "-----------------", parse_mode = "Markdown") 
                 else:
@@ -293,7 +304,7 @@ def main():
                 
                 i = 0
                 send_message(chat_id, "*Сегодня*"+"\n"+"-----------------", parse_mode = "Markdown")#ЭТО
-                while i != len(urok) and len(u["today"])>0:
+                while len(u["today"])>i:
                     send_message(chat_id,"Урок: " +u["today"][i]+"\n"+"Задание: "+d["today"][i]+ "\n"+"Оценка: "+o["today"][i])
                     i+=1  
                 send_message(chat_id, "-----------------", parse_mode = "Markdown") 
@@ -311,4 +322,4 @@ while True:
     try:
         main()
     except:
-        continue
+        continue    
