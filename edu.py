@@ -190,7 +190,7 @@ def coll1():
         o["saturday"].append(i)                
     
 
-token = "780733538:AAG4GVI0Ah-qPlwpHrCh8E2Js6bzpxgKCE0"
+token = "736696148:AAF-dTrtgp0n4bOLsnLuXl9I32ZGb3NUBOM"
 URL = "https://api.telegram.org/bot"+token+"/"
 def get_updates():
     url = URL+ "getupdates"
