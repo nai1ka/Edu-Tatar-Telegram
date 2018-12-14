@@ -4,9 +4,14 @@ from datetime import date
 from flask import Flask
 app = Flask(__name__)
 dayforcol = 7
+login = {}
+password = {}
+fl = False
+
 d = {'today': [], 'tommorow': [], 'monday':[], 'tuesday':[], 'wednesday':[], 'thursday':[], 'friday':[], 'saturday':[]}
 u = {'today': [], 'tommorow': [], 'monday':[], 'tuesday':[], 'wednesday':[], 'thursday':[], 'friday':[], 'saturday':[]}
 o = {'today': [], 'tommorow': [], 'monday':[], 'tuesday':[], 'wednesday':[], 'thursday':[], 'friday':[], 'saturday':[]}
+
 import xml.etree.ElementTree as et
 from dateutil.relativedelta import relativedelta, MO,WE, TH,TU,SU,FR,SA
 now = datetime.datetime.now()
@@ -51,15 +56,20 @@ headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.101 Safari/537.36',
     'referer' : 'https://edu.tatar.ru/logon'
     }
-params = {
-      'main_login':'4823114196',
-      'main_password':'be7l'
-   }
+
+
 
 #-----------------------------------------------------------------------------------
 
 def auth():
     global r,soup,session
+
+
+    params = {
+          'main_login':login[str(chat_id)],
+          'main_password':password[str(chat_id)]
+       }  
+
     session = requests.Session()
     session.get("https://edu.tatar.ru/logon",proxies = proxies)
     session.post("https://edu.tatar.ru/logon",params,headers=headers,proxies = proxies)
@@ -77,7 +87,7 @@ def findday():
     thursday = (today + relativedelta(weekday=TH(-1))).day 
     friday = (today + relativedelta(weekday=FR(-1))).day 
     saturday = (today + relativedelta(weekday=SA(-1))).day 
-#auth()
+
 def collect(dayforcol):
     global session,dz,urok,och
     r = session.get("https://edu.tatar.ru/user/diary.xml",proxies = proxies)
@@ -110,44 +120,57 @@ def coll1():
     global urok,och,dz,d
     
     collect(now.day)
+
     
     for i in dz:
         d["today"].append(i)
-    for i in urok:
+    
         u["today"].append(i) 
+    
     for i in och:
         o["today"].append(i)
-        
+    
+
     dz = []
     urok = []
     och = []
     collect((datetime.date.today()+datetime.timedelta(days=1)).day)
     for i in dz:
         d["tommorow"].append(i)
+        
+    
     for i in urok:
-        u["tommorow"].append(i)  
+                u["tommorow"].append(i)  
+    
     for i in och:
         o["tommorow"].append(i)                
+    
     dz = []
     urok = []
     och = []    
     collect(monday)
     for i in dz:
         d["monday"].append(i)
+    
     for i in urok:
         u["monday"].append(i)  
+    
     for i in och:
         o["monday"].append(i)                
+   
     dz = []
     urok = []
     och = []    
     collect(wednesday)
     for i in dz:
         d["wednesday"].append(i)
+    
     for i in urok:
         u["wednesday"].append(i)    
+   
     for i in och:
         o["wednesday"].append(i)                
+   
     dz = []
     urok = []
     och = []    
@@ -157,7 +180,8 @@ def coll1():
     for i in urok:
         u["tuesday"].append(i)  
     for i in och:
-        o["tuesday"].append(i)            
+        o["tuesday"].append(i)  
+    
     dz = []
     urok = []
     och = []    
@@ -168,6 +192,7 @@ def coll1():
         u["thursday"].append(i) 
     for i in och:
         o["thursday"].append(i)            
+        
     dz = []
     urok = []
     och = []    
@@ -178,6 +203,7 @@ def coll1():
         u["friday"].append(i)    
     for i in och:
         o["friday"].append(i)                
+            
     dz = []
     urok = []
     och = []    
@@ -187,10 +213,10 @@ def coll1():
     for i in urok:
         u["saturday"].append(i)  
     for i in och:
-        o["saturday"].append(i)                
+        o["saturday"].append(i) 
     
 
-token = "709465966:AAHGXmcYU8_S7UbGwXgTf_CKE3vngeEOOis"
+token = "665510128:AAHQ7p3p6w1oqj-aDlhkHjRwBw_clZSkaNM"
 URL = "https://api.telegram.org/bot"+token+"/"
 def get_updates():
     url = URL+ "getupdates"
@@ -198,6 +224,7 @@ def get_updates():
     
     return r.json()
 def get_message():
+    global login,fl
     data = get_updates()
 
     if len(data["result"])>0:
@@ -208,24 +235,29 @@ def get_message():
     if last_update_id!=current_update_id and "text" in last_object["message"]:
         last_update_id = current_update_id
         chat_id = last_object["message"]["chat"]["id"]
+
         message_text = last_object["message"]["text"]
         message = {
            "chat_id": chat_id,
            "text":message_text
            }
+
+
         return message
+    fl = True
     return None
+
 
 def send_message(chat_id,text="",parse_mode=""):
     url = URL + "sendmessage?chat_id={}&text={}&parse_mode={}".format(chat_id,text,parse_mode)
     requests.get(url)
 def main():
-    global chat_id, projects,islog,message,soup
+    global chat_id, projects,islog,message,soup,login
     global y,urok,och,dz,dayforcol
     findday()
-    auth()
     
-    coll1()
+    
+    
     
     @app.route('/')
     def pas():
@@ -236,7 +268,7 @@ def main():
         if answer!= None:
             chat_id = answer["chat_id"]
             text = answer["text"] 
-            print(answer)
+            #print(answer)
             if "/update" in text or "Обновить" in text:
                 send_message(chat_id, "Загрузка данных. Это может занять некоторое время...")
                 coll1()
@@ -259,7 +291,7 @@ def main():
             elif "Среда" in text  or "/wednesday" in text: #ЭТО             
                 i = 0
                 send_message(chat_id, "*Среда*"+"\n"+"-----------------", parse_mode = "Markdown")#ЭТО
-                print(d,u,o)
+
                 while len(u["wednesday"])>i:
                     send_message(chat_id,"Урок: " +u["wednesday"][i]+"\n"+"Задание: "+d["wednesday"][i]+ "\n"+"Оценка: "+ o["wednesday"][i])
                     i+=1  
@@ -291,7 +323,7 @@ def main():
                     
                     i = 0
                     send_message(chat_id, "*Завтра*"+"\n"+"-----------------", parse_mode = "Markdown")#ЭТО
-                    print(len(u["tommorow"]))
+
                     while len(u["tommorow"])>i:
                         
                         send_message(chat_id,"Урок: " +u["tommorow"][i]+"\n"+"Задание: "+d["tommorow"][i]+ "\n"+"Оценка: "+ o["tommorow"][i])
@@ -314,6 +346,30 @@ def main():
             elif "/start" in text :            
                 
                 send_message(chat_id, "Здравствуйте! Я - бот, созданный Наилем Миннемуллиным. Для подробной информации введите /help")
+                send_message(chat_id, "Введите логин от вашего дневника.")
+                answer = get_message()
+                while answer==None:
+                    answer = get_message()
+
+                login.update({str(chat_id):answer["text"]})
+                print(login)
+                send_message(chat_id, "Введите пароль от дневника")
+                answer = get_message()
+                while answer==None:
+                    answer = get_message()
+                password.update({str(chat_id):answer["text"]})
+                print(password)
+                send_message(chat_id,"Выберите день недели для получения оценок:"+"\n /today - сегодня \n /tommorow - завтра \n /monday - понедельник \n /tuesday - вторник \n /wednesday - среда \n /thursday - четверг \n /friday - пятница \n /saturday - суббота")
+                auth()
+                coll1()
+                
+                
+                
+                
+                    
+                    
+
+
             else:
                 send_message(chat_id, "К сожалению, у меня нет такой команды. Введите /help для получения списка комманд", )  
         else:
