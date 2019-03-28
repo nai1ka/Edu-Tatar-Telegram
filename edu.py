@@ -7,7 +7,9 @@ dayforcol = 7
 login = {}
 password = {}
 fl = False
-
+den={}
+ur={}
+oc={}
 d = {'today': [], 'tommorow': [], 'monday':[], 'tuesday':[], 'wednesday':[], 'thursday':[], 'friday':[], 'saturday':[]}
 u = {'today': [], 'tommorow': [], 'monday':[], 'tuesday':[], 'wednesday':[], 'thursday':[], 'friday':[], 'saturday':[]}
 o = {'today': [], 'tommorow': [], 'monday':[], 'tuesday':[], 'wednesday':[], 'thursday':[], 'friday':[], 'saturday':[]}
@@ -21,8 +23,8 @@ last_update_id = 0
 r = requests.models.Response
 ismonth = False
 proxies = {
-  'http': 'http://85.21.63.48:44063',
-  'https': 'http://94.242.58.108:10010',
+  'http': 'http://83.220.241.153:36914',
+  'https': 'http://78.40.87.18:808',
 }
 if mon == 1:
     moth = "Январь"
@@ -69,6 +71,7 @@ def auth():
           'main_login':login[str(chat_id)],
           'main_password':password[str(chat_id)]
        }  
+    print(type(login[str(chat_id)]))
 
     session = requests.Session()
     session.get("https://edu.tatar.ru/logon",proxies = proxies)
@@ -352,15 +355,39 @@ def main():
                     answer = get_message()
 
                 login.update({str(chat_id):answer["text"]})
-                print(login)
+               # print(login)
                 send_message(chat_id, "Введите пароль от дневника")
                 answer = get_message()
                 while answer==None:
                     answer = get_message()
                 password.update({str(chat_id):answer["text"]})
-                print(password)
+               # print(password)
                 send_message(chat_id,"Выберите день недели для получения оценок:"+"\n /today - сегодня \n /tommorow - завтра \n /monday - понедельник \n /tuesday - вторник \n /wednesday - среда \n /thursday - четверг \n /friday - пятница \n /saturday - суббота")
                 auth()
+                d["friday"]=[]
+                u["friday"]=[]
+                o["friday"]=[]
+                d["today"]=[]
+                u["today"]=[]
+                o["today"]=[]
+                d["monday"]=[]
+                u["monday"]=[]
+                o["monday"]=[]      
+                d["tuesday"]=[]
+                u["tuesday"]=[]
+                o["tuesday"]=[] 
+                d["wednesday"]=[]
+                u["wednesday"]=[]
+                o["wednesday"]=[] 
+                d["thursday"]=[]
+                u["thursday"]=[]
+                o["thursday"]=[]
+                d["saturday"]=[]
+                u["saturday"]=[]
+                o["saturday"]=[]  
+                d["tommorow"]=[]
+                u["tommorow"]=[]
+                o["tommorow"]=[]                
                 coll1()
                 
                 
@@ -378,4 +405,5 @@ while True:
     try:
         main()
     except:
+        print("ERROR")
         continue    
