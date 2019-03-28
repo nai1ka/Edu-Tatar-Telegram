@@ -16,8 +16,8 @@ last_update_id = 0
 r = requests.models.Response
 ismonth = False
 proxies = {
-  'http': 'http://85.21.63.48:44063',
-  'https': 'http://94.242.58.108:10010',
+  'http': 'http://83.220.241.153:36914',
+  'https': 'http://78.40.87.18:808',
 }
 if mon == 1:
     moth = "Январь"
@@ -53,7 +53,7 @@ headers = {
     }
 params = {
       'main_login':'4823114196',
-      'main_password':''
+      'main_password':'be7l'
    }
 
 #-----------------------------------------------------------------------------------
@@ -322,4 +322,5 @@ while True:
     try:
         main()
     except:
-        continue   
+        print("ERROR")
+        continue
