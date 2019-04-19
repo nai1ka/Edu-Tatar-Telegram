@@ -1,4 +1,5 @@
 import requests
+import traceback
 import datetime
 from datetime import date
 from flask import Flask
@@ -23,9 +24,9 @@ last_update_id = 0
 r = requests.models.Response
 ismonth = False
 proxies = {
-  'http': 'http://83.220.241.153:36914',
-  'https': 'http://78.40.87.18:808',
+  'https': 'https://195.208.172.70:8080'
 }
+
 if mon == 1:
     moth = "Январь"
 if mon == 2:
@@ -261,8 +262,7 @@ def main():
     
     
     
-    
-    @app.route('/')
+#@app.route('/')
     def pas():
         return "Hello"  
     while True:
@@ -355,13 +355,13 @@ def main():
                     answer = get_message()
 
                 login.update({str(chat_id):answer["text"]})
-               # print(login)
+                print(login)
                 send_message(chat_id, "Введите пароль от дневника")
                 answer = get_message()
                 while answer==None:
                     answer = get_message()
                 password.update({str(chat_id):answer["text"]})
-               # print(password)
+                print(password)
                 send_message(chat_id,"Выберите день недели для получения оценок:"+"\n /today - сегодня \n /tommorow - завтра \n /monday - понедельник \n /tuesday - вторник \n /wednesday - среда \n /thursday - четверг \n /friday - пятница \n /saturday - суббота")
                 auth()
                 d["friday"]=[]
@@ -389,14 +389,7 @@ def main():
                 u["tommorow"]=[]
                 o["tommorow"]=[]                
                 coll1()
-                
-                
-                
-                
-                    
-                    
-
-
+ 
             else:
                 send_message(chat_id, "К сожалению, у меня нет такой команды. Введите /help для получения списка комманд", )  
         else:
@@ -404,6 +397,10 @@ def main():
 while True:
     try:
         main()
-    except:
-        print("ERROR")
-        continue    
+    except Exception as e:
+        login = {}
+        password = {}
+        send_message(chat_id, "Произошла неизветсная ошибка. Пожалуйста, напишите разработчику об этом. Программа перезапускается", )  
+        send_message(chat_id, "Для повторной авторизации введите /start", )  
+        print('Ошибка:\n', traceback.format_exc())
+        continue  
