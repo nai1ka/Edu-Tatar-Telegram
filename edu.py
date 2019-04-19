@@ -1,6 +1,8 @@
 import requests
 import datetime
+
 from datetime import date
+import traceback
 from flask import Flask
 app = Flask(__name__)
 dayforcol = 7
@@ -16,9 +18,9 @@ last_update_id = 0
 r = requests.models.Response
 ismonth = False
 proxies = {
-  'http': 'http://83.220.241.153:36914',
-  'https': 'http://78.40.87.18:808',
+  'https': 'https://195.208.172.70:8080'
 }
+
 if mon == 1:
     moth = "Январь"
 if mon == 2:
@@ -321,6 +323,6 @@ def main():
 while True:
     try:
         main()
-    except:
-        print("ERROR")
+    except Exception as e:
+        print('Ошибка:\n', traceback.format_exc())
         continue
