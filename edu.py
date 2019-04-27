@@ -18,7 +18,7 @@ last_update_id = 0
 r = requests.models.Response
 ismonth = False
 proxies = {
-  'https': 'https://195.208.172.70:8080'
+  'https': 'https://91.217.42.3:8080'
 }
 
 if mon == 1:
