@@ -387,7 +387,10 @@ def main():
                 o["saturday"]=[]  
                 d["tommorow"]=[]
                 u["tommorow"]=[]
-                o["tommorow"]=[]                
+                o["tommorow"]=[]  
+                d["today"]=[]
+                u["today"]=[]
+                o["today"]=[] 
                 coll1()
  
             else:
