@@ -10,7 +10,7 @@ app = Flask(__name__)
 login = {}
 password = {}
 
-token = "881331072:AAFVtbLzMc9PRZ1sAQ0Ejz21XUA122N1_Eo"
+token = "974890667:AAGwif71apXIv31QcCXlM88DMlaDLmlg0nY"
 URL = "https://api.telegram.org/bot"+token+"/"
 now = datetime.datetime.now()
 today = date.today()
